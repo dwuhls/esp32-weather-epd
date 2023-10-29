@@ -43,6 +43,7 @@
 #include "128x128/battery_full_90deg_128x128.h"
 #include "128x128/biological_hazard_symbol_128x128.h"
 #include "128x128/error_icon_128x128.h"
+#include "128x128/eth_128x128.h"
 #include "128x128/house_128x128.h"
 #include "128x128/house_humidity_128x128.h"
 #include "128x128/house_raindrops_128x128.h"

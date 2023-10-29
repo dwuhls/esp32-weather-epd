@@ -43,6 +43,7 @@
 #include "24x24/battery_full_90deg_24x24.h"
 #include "24x24/biological_hazard_symbol_24x24.h"
 #include "24x24/error_icon_24x24.h"
+#include "24x24/eth_24x24.h"
 #include "24x24/house_24x24.h"
 #include "24x24/house_humidity_24x24.h"
 #include "24x24/house_raindrops_24x24.h"

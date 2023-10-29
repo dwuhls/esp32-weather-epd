@@ -43,6 +43,7 @@
 #include "48x48/battery_full_90deg_48x48.h"
 #include "48x48/biological_hazard_symbol_48x48.h"
 #include "48x48/error_icon_48x48.h"
+#include "48x48/eth_48x48.h"
 #include "48x48/house_48x48.h"
 #include "48x48/house_humidity_48x48.h"
 #include "48x48/house_raindrops_48x48.h"

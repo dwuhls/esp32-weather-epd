@@ -43,6 +43,7 @@
 #include "160x160/battery_full_90deg_160x160.h"
 #include "160x160/biological_hazard_symbol_160x160.h"
 #include "160x160/error_icon_160x160.h"
+#include "160x160/eth_160x160.h"
 #include "160x160/house_160x160.h"
 #include "160x160/house_humidity_160x160.h"
 #include "160x160/house_raindrops_160x160.h"

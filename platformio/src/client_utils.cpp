@@ -253,6 +253,55 @@ bool waitForSNTPSync(tm *timeInfo)
   return httpResponse;
 } // getOWMairpollution
 
+/* Perform an HTTP GET request to CryptoCompare's API
+ * If data is received, it will be parsed and stored in the global variable
+ * crypto_price.
+ *
+ * Returns the HTTP Status Code.
+ */
+#ifdef USE_HTTP
+int getCryptoPrice(WiFiClient &client, crypto_resp_price_t &r)
+#else
+int getCryptoPrice(WiFiClientSecure &client, crypto_resp_price_t &r)
+#endif
+{
+  int attempts = 0;
+  bool rxSuccess = false;
+  DeserializationError jsonErr = {};
+
+  String uri = "/data/pricemulti?fsyms=ETH,BTC&tsyms=USD";
+
+  // This string is printed to terminal to help with debugging
+  String sanitizedUri = "min-api.cryptocompare.com" + uri;
+
+  Serial.println("Attempting HTTP Request: " + sanitizedUri);
+  int httpResponse = 0;
+  while (!rxSuccess && attempts < 3)
+  {
+    HTTPClient http;
+    http.begin(client, "min-api.cryptocompare.com", OWM_PORT, uri);
+    httpResponse = http.GET();
+    if (httpResponse == HTTP_CODE_OK)
+    {
+      jsonErr = deserializeCryptoPrice(http.getStream(), r);
+      if (jsonErr)
+      {
+        // -100 offset to distinguish these errors from httpClient errors
+        httpResponse = -100 - static_cast<int>(jsonErr.code());
+      }
+      rxSuccess = !jsonErr;
+    }
+    client.stop();
+    http.end();
+    Serial.println("  " + String(httpResponse, DEC) + " "
+                   + getHttpResponsePhrase(httpResponse));
+    ++attempts;
+  }
+
+  return httpResponse;
+} // getCryptoPrice
+
+
 /* Prints debug information about heap usage.
  */
 void printHeapUsage() {

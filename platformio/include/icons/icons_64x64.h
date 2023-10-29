@@ -43,6 +43,7 @@
 #include "64x64/battery_full_90deg_64x64.h"
 #include "64x64/biological_hazard_symbol_64x64.h"
 #include "64x64/error_icon_64x64.h"
+#include "64x64/eth_64x64.h"
 #include "64x64/house_64x64.h"
 #include "64x64/house_humidity_64x64.h"
 #include "64x64/house_raindrops_64x64.h"

@@ -43,6 +43,7 @@
 #include "196x196/battery_full_90deg_196x196.h"
 #include "196x196/biological_hazard_symbol_196x196.h"
 #include "196x196/error_icon_196x196.h"
+#include "196x196/eth_196x196.h"
 #include "196x196/house_196x196.h"
 #include "196x196/house_humidity_196x196.h"
 #include "196x196/house_raindrops_196x196.h"

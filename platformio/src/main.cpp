@@ -39,6 +39,7 @@
 // too large to allocate locally on stack
 static owm_resp_onecall_t       owm_onecall;
 static owm_resp_air_pollution_t owm_air_pollution;
+static crypto_resp_price_t crypto_price;
 
 Preferences prefs;
 
@@ -241,10 +242,12 @@ void setup()
     statusStr = "One Call " + OWM_ONECALL_VERSION + " API";
     tmpStr = String(rxStatus, DEC) + ": " + getHttpResponsePhrase(rxStatus);
     initDisplay();
+#ifdef HIDE_API_ERRORS
     do
     {
       drawError(wi_cloud_down_196x196, statusStr, tmpStr);
     } while (display.nextPage());
+#endif
     display.powerOff();
     beginDeepSleep(startTime, &timeInfo);
   }
@@ -256,13 +259,35 @@ void setup()
     statusStr = "Air Pollution API";
     tmpStr = String(rxStatus, DEC) + ": " + getHttpResponsePhrase(rxStatus);
     initDisplay();
+#ifdef HIDE_API_ERRORS
     do
     {
       drawError(wi_cloud_down_196x196, statusStr, tmpStr);
     } while (display.nextPage());
+#endif
     display.powerOff();
     beginDeepSleep(startTime, &timeInfo);
   }
+#ifdef SHOW_CRYPTO
+    rxStatus = getCryptoPrice(client, crypto_price);
+    if (rxStatus != HTTP_CODE_OK)
+    {
+      waitForSNTPSync(&timeInfo);
+      killWiFi();
+      statusStr = "Crypto API";
+      tmpStr = String(rxStatus, DEC) + ": " + getHttpResponsePhrase(rxStatus);
+      initDisplay();
+#ifdef HIDE_API_ERRORS
+      do
+      {
+        drawError(wi_cloud_down_196x196, statusStr, tmpStr);
+      } while (display.nextPage());
+#endif
+      display.powerOff();
+      beginDeepSleep(startTime, &timeInfo);
+    }
+#endif
+
 
   // COMPLETE TIME SYNCHRONIZATION
   bool timeConfigured = waitForSNTPSync(&timeInfo);
@@ -272,10 +297,12 @@ void setup()
     Serial.println("Failed To Fetch The Time");
     killWiFi();
     initDisplay();
+    #ifdef HIDE_API_ERRORS
     do
     {
       drawError(wi_time_4_196x196, "Failed To Fetch", "The Time");
     } while (display.nextPage());
+    #endif
     display.powerOff();
     beginDeepSleep(startTime, &timeInfo);
   }
@@ -330,7 +357,7 @@ void setup()
 #ifndef DISABLE_ALERTS
     drawAlerts(owm_onecall.alerts, CITY_STRING, dateStr);
 #endif
-    drawStatusBar(statusStr, refreshTimeStr, wifiRSSI, batteryVoltage);
+    drawStatusBar(statusStr, refreshTimeStr, wifiRSSI, batteryVoltage, crypto_price);
   } while (display.nextPage());
   display.powerOff();
 

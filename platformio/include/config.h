@@ -21,6 +21,14 @@
 #include <cstdint>
 #include <Arduino.h>
 
+// Comment to show API errors, which will take up the entire screen
+// By hiding API errors, the data from the previous successful API 
+// pull will remain on the screen.
+#define HIDE_API_ERRORS
+
+// Comment out to disable crypto price pull and display
+#define SHOW_CRYPTO
+
 // E-PAPER PANEL
 // This project supports the following E-Paper panels:
 //   DISP_BW_V2 - Waveshare 7.5in e-paper (v2)      800x480px  Black/White

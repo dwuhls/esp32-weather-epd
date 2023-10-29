@@ -295,3 +295,48 @@ DeserializationError deserializeAirQuality(WiFiClient &json,
   return error;
 } // end deserializeAirQuality
 
+bool isHex(const String &str) {
+    for(char c : str) {
+        if (!isxdigit(c)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+String readChunkedResponse(WiFiClient &json) {
+    String result = "";
+    while(json.available()) {
+        String line = json.readStringUntil('\n');
+        line.trim();
+        if (isHex(line)) {  // If the line is a hex number (chunk size), skip it
+            continue;
+        }
+        result += line;  // Otherwise, append the line to our result
+    }
+    return result;
+}
+
+
+DeserializationError deserializeCryptoPrice(WiFiClient &json, crypto_resp_price_t &r) {
+  DynamicJsonDocument doc(1 * 1024);  // Adjusted buffer size due to increased JSON complexity
+
+  String receivedData = readChunkedResponse(json);
+  Serial.println("Received Data: " + receivedData);
+  DeserializationError error = deserializeJson(doc, receivedData);
+  Serial.println("[debug] doc.memoryUsage() : "
+                 + String(doc.memoryUsage()) + " B");
+  Serial.println("[debug] doc.capacity() : "
+                 + String(doc.capacity()) + " B"); // 0 on allocation failure
+
+  // DeserializationError error = deserializeJson(doc, json);
+  if (error) {
+    return error;
+  }
+
+  // Extract the Ethereum price in USD, considering the new nesting
+  r.eth_usd = doc["ETH"]["USD"].as<float>();
+  r.btc_usd = doc["BTC"]["USD"].as<float>();
+
+  return error;
+} // end deserializeCryptoPrice

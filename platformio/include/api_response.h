@@ -216,6 +216,20 @@ DeserializationError deserializeOneCall(WiFiClient &json,
 DeserializationError deserializeAirQuality(WiFiClient &json,
                                            owm_resp_air_pollution_t &r);
 
+String readChunkedResponse(WiFiClient &json);
+bool isHex(const String &str);
+
+/*
+ * Response for crypto Price in USD
+ */
+typedef struct crypto_price
+{
+  float eth_usd;   // Price of Ethereum in USD
+  float btc_usd;   // Price of Bitcoin in USD
+} crypto_resp_price_t;
+
+DeserializationError deserializeCryptoPrice(WiFiClient &json,
+                                           crypto_resp_price_t &r);
 
 #endif
 

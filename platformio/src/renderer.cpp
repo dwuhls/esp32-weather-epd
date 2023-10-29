@@ -986,7 +986,7 @@ void drawOutlookGraph(owm_hourly_t *const hourly, tm timeInfo)
  * the display.
  */
 void drawStatusBar(const String &statusStr, const String &refreshTimeStr,
-                   int rssi, double batVoltage)
+                   int rssi, double batVoltage, const crypto_resp_price_t &crypto_price)
 {
   String dataStr;
   uint16_t dataColor = GxEPD_BLACK;
@@ -1027,6 +1027,20 @@ void drawStatusBar(const String &statusStr, const String &refreshTimeStr,
   display.drawInvertedBitmap(pos, DISP_HEIGHT - 1 - 21, wi_refresh_32x32,
                              32, 32, dataColor);
   pos -= sp;
+
+#ifdef SHOW_CRYPTO
+  // ETH
+  dataStr = "ETH: $" + String(crypto_price.eth_usd);
+  drawString(pos, DISP_HEIGHT - 1 - 2, dataStr, RIGHT, dataColor);
+  pos -= getStringWidth(dataStr);
+  pos -= sp;
+
+  // BTC
+  dataStr = "BTC: $" + String(crypto_price.btc_usd);
+  drawString(pos, DISP_HEIGHT - 1 - 2, dataStr, RIGHT, dataColor);
+  pos -= getStringWidth(dataStr);
+  pos -= sp;
+#endif
 
   // status
   dataColor = ACCENT_COLOR;
